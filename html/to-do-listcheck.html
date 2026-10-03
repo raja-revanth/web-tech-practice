@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0px;
+            margin: 0px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        ul {
+            list-style-type: none;
+            margin-top: 20px;
+        }
+        li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>To-Do List</h1>
+      <input type="text" id="taskInput" placeholder="Enter a task" />
+      <button onclick="addTask()">Add Task</button>
+      <div>
+        <ul id="taskList"></ul>
+      </div>
+    </div>
+    <script>
+      function addTask() {
+        const taskInput = document.getElementById("taskInput");
+        const taskList = document.getElementById("taskList");
+        const taskText = taskInput.value.trim();
+
+        if (taskText !== "") {
+          const listItem = document.createElement("li");
+          listItem.textContent = taskText;
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.onclick = function () {
+            taskList.removeChild(listItem);
+          };
+         
+
+          listItem.appendChild(deleteButton);
+          taskList.appendChild(listItem);
+
+          taskInput.value = "";
+          taskInput.focus();
+        }
+      }
+    </script>
+  </body>
+</html>

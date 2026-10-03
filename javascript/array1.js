@@ -1,0 +1,14 @@
+let num=[1,2,3,4,5,6,7];
+console.log(num);
+num.push(48);
+console.log(num);
+let l = num.length;
+console.log(l);
+console.log(num[l-1]);
+num.unshift(49);
+console.log(num);
+console.log(num[3]);
+num.unshift();
+num.pop();
+console.log(num);
+console.log(num[4]);

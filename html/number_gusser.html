@@ -1,0 +1,367 @@
+//number_gusser.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Guesser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: "Space Grotesk", sans-serif;
+        background: #0a0612;
+        overflow: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::before {
+        width: 420px;
+        height: 420px;
+        top: -120px;
+        left: -80px;
+        background: rgba(255, 0, 128, 0.35);
+      }
+
+      body::after {
+        width: 380px;
+        height: 380px;
+        bottom: -100px;
+        right: -60px;
+        background: rgba(0, 255, 255, 0.25);
+      }
+
+      .game {
+        position: relative;
+        z-index: 1;
+        width: min(440px, 100%);
+        padding: 36px 32px 32px;
+        border-radius: 24px;
+        background: rgba(18, 10, 32, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 0 0 1px rgba(255, 0, 128, 0.15),
+          0 24px 80px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        margin-bottom: 16px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #00ffff;
+        background: rgba(0, 255, 255, 0.08);
+        border: 1px solid rgba(0, 255, 255, 0.25);
+      }
+
+      h1 {
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(1.6rem, 5vw, 2rem);
+        font-weight: 900;
+        line-height: 1.1;
+        color: #fff;
+        text-shadow: 0 0 24px rgba(255, 0, 128, 0.5);
+        margin-bottom: 10px;
+      }
+
+      .hint {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.95rem;
+        margin-bottom: 28px;
+      }
+
+      .range-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .input-wrap {
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.35);
+        color: #fff;
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.2);
+        font-size: 1rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 500;
+      }
+
+      input:focus {
+        border-color: #ff0080;
+        box-shadow: 0 0 0 4px rgba(255, 0, 128, 0.2);
+      }
+
+      input:disabled {
+        opacity: 0.5;
+      }
+
+      input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 12px;
+      }
+
+      button {
+        padding: 14px 18px;
+        border: none;
+        border-radius: 14px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.15s, filter 0.15s, opacity 0.15s;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        filter: brightness(1.08);
+      }
+
+      button:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      #checkBtn {
+        background: linear-gradient(135deg, #ff0080, #7928ca);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(255, 0, 128, 0.35);
+      }
+
+      #newGameBtn {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .feedback {
+        margin-top: 24px;
+        padding: 18px;
+        border-radius: 16px;
+        text-align: center;
+        min-height: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        transition: background 0.25s, border-color 0.25s;
+      }
+
+      #message {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      #attempts {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .feedback.higher {
+        background: rgba(255, 100, 50, 0.12);
+        border-color: rgba(255, 120, 60, 0.35);
+      }
+
+      .feedback.higher #message {
+        color: #ff9f6b;
+      }
+
+      .feedback.lower {
+        background: rgba(0, 200, 255, 0.1);
+        border-color: rgba(0, 200, 255, 0.35);
+      }
+
+      .feedback.lower #message {
+        color: #67e8f9;
+      }
+
+      .feedback.win {
+        background: rgba(50, 255, 130, 0.12);
+        border-color: rgba(50, 255, 130, 0.4);
+        animation: pulse 0.6s ease;
+      }
+
+      .feedback.win #message {
+        color: #6ee7a0;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.95rem;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game">
+      <span class="badge">Arcade Mode</span>
+      <h1>Guess<br />The Number</h1>
+      <p class="hint">Pick a number between 1 and 100. I'll tell you if you're hot or cold.</p>
+
+      <div class="range-bar">
+        <span>1</span>
+        <span>100</span>
+      </div>
+
+      <div class="input-wrap">
+        <input type="number" id="guess" min="1" max="100" placeholder="?" autofocus />
+      </div>
+
+      <div class="actions">
+        <button id="checkBtn" type="button">Submit Guess</button>
+        <button id="newGameBtn" type="button">Restart</button>
+      </div>
+
+      <div class="feedback" id="feedback">
+        <div id="message">Ready when you are.</div>
+        <div id="attempts">Attempts: 0</div>
+      </div>
+    </div>
+
+    <script>
+      let secretNumber = 0;
+      let attempts = 0;
+      let gameOver = false;
+
+      const guessInput = document.getElementById("guess");
+      const checkBtn = document.getElementById("checkBtn");
+      const newGameBtn = document.getElementById("newGameBtn");
+      const feedback = document.getElementById("feedback");
+      const message = document.getElementById("message");
+      const attemptsEl = document.getElementById("attempts");
+
+      function startNewGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        gameOver = false;
+        guessInput.value = "";
+        guessInput.disabled = false;
+        checkBtn.disabled = false;
+        feedback.className = "feedback";
+        message.textContent = "Ready when you are.";
+        attemptsEl.textContent = "Attempts: 0";
+        guessInput.focus();
+      }
+
+      function checkGuess() {
+        if (gameOver) return;
+
+        const guess = Number(guessInput.value);
+
+        if (!guessInput.value || guess < 1 || guess > 100) {
+          feedback.className = "feedback";
+          message.textContent = "Enter a valid number between 1 and 100.";
+          return;
+        }
+
+        attempts += 1;
+        attemptsEl.textContent = "Attempts: " + attempts;
+
+        if (guess > secretNumber) {
+          feedback.className = "feedback higher";
+          message.textContent = "Too high — go lower!";
+        } else if (guess < secretNumber) {
+          feedback.className = "feedback lower";
+          message.textContent = "Too low — go higher!";
+        } else {
+          feedback.className = "feedback win";
+          message.textContent =
+            "You got it! The number was " +
+            secretNumber +
+            " in " +
+            attempts +
+            " attempt" +
+            (attempts === 1 ? "" : "s") +
+            ".";
+          gameOver = true;
+          guessInput.disabled = true;
+          checkBtn.disabled = true;
+        }
+
+        guessInput.select();
+      }
+
+      checkBtn.addEventListener("click", checkGuess);
+      newGameBtn.addEventListener("click", startNewGame);
+
+      guessInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") checkGuess();
+      });
+
+      startNewGame();
+    </script>
+  </body>
+</html>

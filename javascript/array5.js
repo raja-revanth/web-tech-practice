@@ -1,0 +1,10 @@
+let nums=[1,2,3,4];
+//const[a,b,c,d] = nums;
+//console.log(a);
+//console.log(b);
+//console.log(c);
+//console.log(d);
+const[a,b,,d]=nums;
+console.log(a);
+console.log(b);
+console.log(d);

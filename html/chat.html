@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Calculator</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+      }
+      .button-container {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        justify-content: center;
+        gap: 40px;
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #e9e1e1;
+      }
+      button {
+        width: 60px;
+        height: 25px;
+      }
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 20px;
+        width: 70vw;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #e8dfdf;
+        -webkit-box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+        box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+                width: 65vw;
+
+        margin-top: 5px;
+      }
+      .button-container {
+        display: flex;
+        flex-direction: row-reverse;
+        background-color: #e8dfdf;
+        padding: 23px;
+        margin-top: 10px;
+        height: 50px;
+                width: 70vw;
+
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        -webkit-box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+        box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+      }
+      .heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      label {
+        margin-bottom: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="heading">
+        <h1>Bill Calculator</h1>
+      </div>
+      <div class="main-container">
+        <div class="field">
+          <label> Bill Amount</label>
+          <input type="number" id="billAmount" placeholder="Enter Bill Amount" />
+        </div>
+        <div class="field">
+          <label>Discount</label>
+          <input type="number" id="discount" placeholder="Enter Discount" onblur="getgrossBill()" />
+        </div>
+        <div class="field">
+          <label>Gross bill</label>
+          <input type="number" id="grossBill" readonly />
+        </div>
+        <div class="field">
+          <label>GST</label>
+          <input type="number" id="gst" placeholder="Enter GST" onblur="getGST()" />
+        </div>
+        <div class="field">
+          <label>GST Amount</label>
+          <input type="number" id="gstAmount" readonly />
+        </div>
+        <div class="field">
+          <label>Net Amount</label>
+          <input type="number" id="netAmount" readonly />
+        </div>
+        <div class="field">
+          <label> Tip Amount</label>
+          <input type="number" id="tipAmount" placeholder="Enter Tip Amount" onblur="getTipAmount()" />
+        </div>
+        <div class="field">
+          <label>Final Bill Amount</label>
+          <input type="number" id="finalBill" readonly />
+        </div>
+        <div class="field">
+          <label>Split Bill</label>
+          <input type="number" id="splitBill" placeholder="Enter Number of People" onblur="getSplitAmount()" />
+        </div>
+        <div class="field">
+          <label>Split Amount</label>
+          <input type="number" id="splitAmount" readonly />
+        </div>
+      </div>
+      <div class="button-container">
+        <div>
+          <button id="payButton">pay</button>
+        </div>
+        <div>
+          <button id="cancelButton">cancel</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      var billAmountElement = document.getElementById("billAmount");
+      var discountElement = document.getElementById("discount");
+      var grossBillElement = document.getElementById("grossBill");
+      var gstElement = document.getElementById("gst");
+      var gstAmountElement = document.getElementById("gstAmount");
+      var netAmountElement = document.getElementById("netAmount");
+      var tipAmountElement = document.getElementById("tipAmount");
+      var finalBillElement = document.getElementById("finalBill");
+      var splitBillElement = document.getElementById("splitBill");
+      var splitAmountElement = document.getElementById("splitAmount");
+      var payButton = document.getElementById("payButton");
+      var cancelButton = document.getElementById("cancelButton");
+      let Discount,BillAmount,GrossBillAmount,GSTpercentage,GSTAmount,NetAmount,TipAmount,SplitBill,SplitAmount,totalBillAmount;
+      
+      function getgrossBill() {
+        try {
+          if (!billAmountElement.value || !discountElement.value) {
+            alert("Please enter Bill Amount and Discount");
+            return;
+          }
+          BillAmount = parseInt(billAmountElement.value);
+          Discount = parseInt(discountElement.value);
+          
+          if (BillAmount < 0 || Discount < 0) {
+            alert("Amount cannot be negative");
+            return;
+          }
+          
+          GrossBillAmount = BillAmount - Discount;
+          grossBillElement.value = GrossBillAmount;
+          gstElement.focus();
+        } catch (error) {
+          alert("Error calculating gross bill: " + error.message);
+        }
+      }
+      
+      function getGST() {
+        try {
+          if (!gstElement.value) {
+            alert("Please enter GST percentage");
+            return;
+          }
+          GSTpercentage = parseInt(gstElement.value);
+          
+          if (GSTpercentage < 0) {
+            alert("GST percentage cannot be negative");
+            return;
+          }
+          
+          GSTAmount = (GrossBillAmount * GSTpercentage) / 100;
+          gstAmountElement.value = GSTAmount.toFixed(2);
+          NetAmount = GrossBillAmount + parseFloat(gstAmountElement.value);
+          netAmountElement.value = NetAmount.toFixed(2);
+          tipAmountElement.focus();
+        } catch (error) {
+          alert("Error calculating GST: " + error.message);
+        }
+      }
+      
+      function getTipAmount() {
+        try {
+          if (!tipAmountElement.value) {
+            alert("Please enter Tip Amount");
+            return;
+          }
+          TipAmount = parseInt(tipAmountElement.value);
+          
+          if (TipAmount < 0) {
+            alert("Tip amount cannot be negative");
+            return;
+          }
+          
+          totalBillAmount = parseFloat(netAmountElement.value) + TipAmount;
+          finalBillElement.value = totalBillAmount.toFixed(2);
+          splitBillElement.focus();
+        } catch (error) {
+          alert("Error calculating tip: " + error.message);
+        }
+      }
+      
+      function getSplitAmount() {
+        try {
+          if (!splitBillElement.value) {
+            alert("Please enter number of people");
+            return;
+          }
+          SplitBill = parseInt(splitBillElement.value);
+          
+          if (SplitBill <= 0) {
+            alert("Number of people must be greater than 0");
+            return;
+          }
+          
+          SplitAmount = totalBillAmount / SplitBill;
+          splitAmountElement.value = SplitAmount.toFixed(2);
+        } catch (error) {
+          alert("Error calculating split: " + error.message);
+        }
+      }
+      
+      function payNow() {
+        try {
+          if (!finalBillElement.value || finalBillElement.value === "0") {
+            alert("Please complete the bill calculation first");
+            return;
+          }
+          
+          let summary = `Bill Summary\n`;
+          summary += `==================\n`;
+          summary += `Bill Amount: ₹${BillAmount}\n`;
+          summary += `Discount: ₹${Discount}\n`;
+          summary += `Gross Bill: ₹${GrossBillAmount}\n`;
+          summary += `GST (${GSTpercentage}%): ₹${GSTAmount.toFixed(2)}\n`;
+          summary += `Net Amount: ₹${NetAmount.toFixed(2)}\n`;
+          summary += `Tip: ₹${TipAmount}\n`;
+          summary += `==================\n`;
+          summary += `TOTAL: ₹${totalBillAmount.toFixed(2)}\n`;
+          
+          if (SplitBill > 0) {
+            summary += `Split (${SplitBill} people): ₹${SplitAmount.toFixed(2)} each\n`;
+          }
+          
+          alert(summary);
+        } catch (error) {
+          alert("Error processing payment: " + error.message);
+        }
+      }
+      
+      function cancelBill() {
+        if (confirm("Are you sure you want to cancel? All data will be cleared.")) {
+          billAmountElement.value = "";
+          discountElement.value = "";
+          grossBillElement.value = "";
+          gstElement.value = "";
+          gstAmountElement.value = "";
+          netAmountElement.value = "";
+          tipAmountElement.value = "";
+          finalBillElement.value = "";
+          splitBillElement.value = "";
+          splitAmountElement.value = "";
+          
+          BillAmount = 0;
+          Discount = 0;
+          GrossBillAmount = 0;
+          GSTAmount = 0;
+          NetAmount = 0;
+          TipAmount = 0;
+          SplitBill = 0;
+          SplitAmount = 0;
+          totalBillAmount = 0;
+          
+          billAmountElement.focus();
+        }
+      }
+      
+      payButton.addEventListener("click", payNow);
+      cancelButton.addEventListener("click", cancelBill);
+    </script>
+  </body>
+</html>

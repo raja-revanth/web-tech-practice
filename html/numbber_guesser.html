@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guess Number</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .main-container {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        background-color: rgb(111, 180, 202);
+      }
+
+      .guess-container {
+        width: 350px;
+        background-color: rgb(224, 222, 222);
+        margin: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        text-align: center;
+        -webkit-box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+        box-shadow: -8px 9px 30px 11px rgba(0, 0, 0, 0.35);
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 200px;
+        padding: 8px;
+        margin-top: 10px;
+      }
+
+      button {
+        padding: 8px 15px;
+        margin-top: 15px;
+        background-color: rgb(170, 215, 112);
+        color: rgb(19, 18, 18);
+
+        border: none;
+      }
+
+      #result {
+        display: block;
+        margin-top: 15px;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="guess-container">
+        <h1>Guess Number</h1>
+        <div>
+          <input
+            type="number"
+            id="guessno"
+            placeholder="Enter Guessing Number"
+          />
+        </div>
+        <div>
+          <span id="result"></span>
+        </div>
+        <dvi>
+          <button onclick="checkGuessNumber()">Guess</button>
+        </dvi>
+      </div>
+    </div>
+
+    <script>
+      var guessNumber = Math.ceil(Math.random() * 100);
+      var guessnoElement = document.getElementById("guessno");
+      var resultElement = document.getElementById("result");
+      var count = 0;
+      function checkGuessNumber() {
+        count++;
+        let gno = parseInt(guessnoElement.value);
+        if (guessNumber == gno) {
+          resultElement.innerHTML = `<h4>Your Guess is Correct. Attempts is ${count}</h4>`;
+        } else if (gno < guessNumber) {
+          resultElement.innerHTML = "<h4>Your Guessing is Too Low</h4>";
+        } else if (gno > guessNumber) {
+          resultElement.innerHTML = "<h4>Your Guessing is Too High</h4>";
+        }
+      }
+    </script>
+  </body>
+</html>

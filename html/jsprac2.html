@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        height: auto;
+        margin: auto;
+        gap: 10px;
+        padding: 10px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .button-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      button {
+        width: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="form-group">
+        <label>enter A value</label>
+        <input type="number" id="inputA" />
+      </div>
+      <div class="form-group">
+        <label>enter B value</label>
+        <input type="number" id="inputB" />
+      </div>
+      <div class="form-group">
+        <label>result</label>
+        <input type="number" id="result" readonly />
+      </div>
+      <div class="button-group">
+        <button onclick="getAdd()">Add</button>
+        <button onclick="getsub()">sub</button>
+        <button onclick="getmul()">mul</button>
+        <button onclick="getdiv()">div</button>
+        <button onclick="getmod()">mod</button>
+      </div>
+    </div>
+    <script>
+      var inputAElement = document.getElementById("inputA");
+      var inputBElement = document.getElementById("inputB");
+      var resultElement = document.getElementById("result");
+      function getAdd() {
+        resultElement.value =
+          parseInt(inputAElement.value) + parseInt(inputBElement.value);
+      }
+      function getsub() {
+        resultElement.value =
+          parseInt(inputAElement.value) - parseInt(inputBElement.value);
+      }
+      function getmul() {
+        resultElement.value =
+          parseInt(inputAElement.value) * parseInt(inputBElement.value);
+      }
+      function getdiv() {
+        resultElement.value =
+          parseInt(inputAElement.value) / parseInt(inputBElement.value);
+      }
+      function getmod() {
+        resultElement.value =
+          parseInt(inputAElement.value) % parseInt(inputBElement.value);
+      }
+    </script>
+  </body>
+</html>

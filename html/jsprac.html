@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body id="body">
+    <script>
+        let bodyElement= document.getElementById("body");
+        let divElement= document.createElement("div");
+        let paraElement= document.createElement("p");
+        let h1Element= document.createElement("h1");
+        paraElement.innerHTML="Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, repellendus. Doloremque accusantium fugiat minus at libero blanditiis nam ea, dolorem deleniti debitis repellendus sequi sed possimus similique optio sit corrupti?";
+        h1Element.innerHTML="welcome to dom manipulation";
+        bodyElement.appendChild(divElement);
+        divElement.appendChild(h1Element);
+        divElement.appendChild(paraElement);
+    </script>
+</body>
+</html>
